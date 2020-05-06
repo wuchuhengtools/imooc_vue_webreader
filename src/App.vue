@@ -9,15 +9,10 @@
 export default {
   name: 'App'
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const html = document.querySelector('html')
+  let fontsize = window.innerWidth / 10
+  fontsize = fontsize > 50 ? 50 : fontsize
+  html.style.fontSize = fontsize + 'px'
+})
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
