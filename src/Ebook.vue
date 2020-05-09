@@ -11,7 +11,9 @@
     </div>
     <menu-bar
       :isTitleMenuShow="isTitleMenuShow"
-      ref="menuBar"></menu-bar>
+      :fontSizeList="fontSizeList"
+      ref="menuBar"
+      ></menu-bar>
   </div>
 </template>
 
@@ -29,7 +31,16 @@ export default {
   },
   data() {
     return {
-      isTitleMenuShow: false
+      isTitleMenuShow: false,
+      fontSizeList: [
+        { fontSize: 12 },
+        { fontSize: 14 },
+        { fontSize: 16 },
+        { fontSize: 18 },
+        { fontSize: 20 },
+        { fontSize: 22 },
+        { fontSize: 24 }
+      ]
     }
   },
   watch: {

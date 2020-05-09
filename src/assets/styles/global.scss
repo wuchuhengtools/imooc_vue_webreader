@@ -19,7 +19,7 @@ $fontSize: 37.5;
 }
 // 菜单动画
 .slide-up-enter, .slide-up-leave-to {
-  transform: translate3d(0, 100%, 0) ;
+  transform: translate3d(0, px2rem(108), 0) ;
 }
 .slide-up-to, .slide-up-leave {
   transform: translate3d(0, 0, 0);
