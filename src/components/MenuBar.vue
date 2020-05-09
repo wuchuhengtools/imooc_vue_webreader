@@ -25,10 +25,14 @@
           <div class="option">
             <div class="select-wrapper"
                  v-for="(item, index) in fontSizeList"
-                 :key="index">
+                 :key="index"
+                  @click="setFonSize(item.fontSize)">
               <div class="line"></div>
               <div class="point-wrapper">
-                <div class="poin"></div>
+                <div class="point" v-show="defaultFontSize === item.fontSize">
+                  <div class="small-point">
+                  </div>
+                </div>
               </div>
               <div class="line"></div>
             </div>
@@ -45,8 +49,7 @@ export default {
   name: 'MenuBar',
   data() {
     return {
-      isSettingShow: false,
-      test: 24
+      isSettingShow: false
     }
   },
   props: {
@@ -57,6 +60,15 @@ export default {
     fontSizeList: {
       type: Array,
       default: Array
+    },
+    defaultFontSize: {
+      type: Number,
+      default: 14
+    }
+  },
+  methods: {
+    setFonSize(fontSize) {
+      this.$emit('setFontSize', fontSize)
     }
   }
 }
@@ -70,6 +82,7 @@ export default {
     bottom: px2rem(48);
     left: 0;
     width: 100%;
+    z-index: 101;
     height: px2rem(60);
     background: white;
     box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
@@ -107,10 +120,29 @@ export default {
             border-bottom: px2rem(1) solid #ccc;
           }
           .point-wrapper {
+            position: relative;
             flex: 0 0 0;
             width: 0;
             height: px2rem(7);
             border-right: px2rem(1) solid #ccc;
+            .point {
+              position: absolute;
+              top: px2rem(-6.5);
+              left: px2rem(-10);
+              width: px2rem(20);
+              height: px2rem(20);
+              border-radius: 50%;
+              background: white;
+              border: px2rem(1) solid #ccc;
+              box-shadow: 0 px2rem(4) px2rem(4) rgba(0, 0, 0, .15);
+              @include center;
+              .small-point {
+                width: px2rem(5);
+                height: px2rem(5);
+                background: #333;
+                border-radius: 50%;
+              }
+            }
           }
         }
       }

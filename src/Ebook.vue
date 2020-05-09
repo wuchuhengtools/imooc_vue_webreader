@@ -12,6 +12,8 @@
     <menu-bar
       :isTitleMenuShow="isTitleMenuShow"
       :fontSizeList="fontSizeList"
+      :defaultFontSize="defaultFontSize"
+      @setFontSize="setFontSize"
       ref="menuBar"
       ></menu-bar>
   </div>
@@ -40,7 +42,8 @@ export default {
         { fontSize: 20 },
         { fontSize: 22 },
         { fontSize: 24 }
-      ]
+      ],
+      defaultFontSize: 14
     }
   },
   watch: {
@@ -61,7 +64,16 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight
       })
+      // 渲染电子书
       this.rendition.display()
+      // 默认字号
+      this.setFontSize(this.defaultFontSize)
+    },
+    setFontSize(fontSize) {
+      if (this.rendition.themes) {
+        this.rendition.themes.fontSize(fontSize + 'px')
+      }
+      this.defaultFontSize = fontSize
     }
   },
   mounted() {
