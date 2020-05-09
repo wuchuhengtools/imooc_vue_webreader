@@ -5,22 +5,22 @@
            :class="{'hide-box-shadow': isSettingShow || !isTitleMenuShow }"
            v-show="isTitleMenuShow">
         <div class="icon-wraper">
-          <span class="icon-menu icon"></span>
+          <span class="icon-menu icon" @click="setSettingShow(0)"></span>
         </div>
         <div class="icon-wraper">
-          <span class="icon-progress icon"></span>
+          <span class="icon-progress icon" @click="setSettingShow(1)"></span>
         </div>
         <div class="icon-wraper">
-          <span class="icon-bright icon"></span>
+          <span class="icon-bright icon" @click="setSettingShow(2)"></span>
         </div>
         <div class="icon-wraper">
-          <span class="icon-a icon" @click="isSettingShow = !isSettingShow">A</span>
+          <span class="icon-a icon" @click="setSettingShow(3)">A</span>
         </div>
       </div>
     </transition>
     <transition name="slide-up">
       <div class="setting-wrap" v-show="isSettingShow">
-        <div class="setting-font-size">
+        <div class="setting-font-size" v-if="tagShow === 3">
           <div class="preview" :style="{'font-size': fontSizeList[0].fontSize + 'px'}">A</div>
           <div class="option">
             <div class="select-wrapper"
@@ -39,6 +39,18 @@
           </div>
           <div class="preview" :style="{'font-size': fontSizeList[fontSizeList.length - 1].fontSize + 'px'}">A</div>
         </div>
+        <div class="setting-theme" v-if="tagShow === 2">
+          <div class="setting-theme-item"
+              v-for="(item, index) in themeList"
+              :key="index"
+              @click="$emit('setTheme', item.name)">
+            <div class="preview"
+              :style="{background: item.style.body.background }"
+              :class="{'no-border': item.style.body.background !== '#fff'}"></div>
+            <div class="text"
+            :class="{ 'selected': defaultTheme === item.name }">{{item.name}}</div>
+          </div>
+        </div>
       </div>
     </transition>
   </div>
@@ -49,7 +61,8 @@ export default {
   name: 'MenuBar',
   data() {
     return {
-      isSettingShow: false
+      isSettingShow: false,
+      tagShow: null
     }
   },
   props: {
@@ -64,11 +77,19 @@ export default {
     defaultFontSize: {
       type: Number,
       default: 14
-    }
+    },
+    themeList: { type: Array, default: Array },
+    defaultTheme: { type: String, default: null }
   },
   methods: {
     setFonSize(fontSize) {
       this.$emit('setFontSize', fontSize)
+    },
+    setSettingShow(tagShow) {
+      if (tagShow === this.tagShow || !this.isSettingShow) {
+        this.isSettingShow = !this.isSettingShow
+      }
+      this.tagShow = tagShow
     }
   }
 }
@@ -143,6 +164,34 @@ export default {
                 border-radius: 50%;
               }
             }
+          }
+        }
+      }
+    }
+    .setting-theme {
+      height: 100%;
+      display: flex;
+      .setting-theme-item {
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+        padding: px2rem(5);
+        box-sizing: border-box;
+        .preview {
+          flex: 1;
+          border: px2rem(1) solid #ccc;
+          box-sizing: border-box;
+          &.no-border {
+            border: none;
+          }
+        }
+        .text {
+          flex: 0 0 px2rem(30);
+          font-size: px2rem(16);
+          color: #ccc;
+          @include center;
+          &.selected {
+            color: #333;
           }
         }
       }
