@@ -69,12 +69,28 @@
         </div>
       </div>
     </transition>
+    <directory
+    v-if="tabShow === 0"
+    :navication="navication"
+    :isBookProgressAvalable="isBookProgressAvalable"
+    @toPage="toPage"></directory>
+    <transition name="fade">
+      <div class="content-mask"
+      v-if="tabShow === 0"
+      @click="tabShow = null">
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import Directory from './Directory'
 export default {
   name: 'MenuBar',
+  components: {Directory},
+  comments: {
+    Directory
+  },
   data() {
     return {
       isSettingShow: false,
@@ -97,7 +113,8 @@ export default {
     themeList: { type: Array, default: Array },
     defaultTheme: { type: String, default: null },
     isBookProgressAvalable: { type: Boolean, default: false },
-    progress: { type: Number, default: 0 }
+    progress: { type: Number, default: 0 },
+    navication: Object
   },
   methods: {
     onProgressInput(progress) {
@@ -111,7 +128,14 @@ export default {
       if (tabShow === this.tabShow || !this.isSettingShow) {
         this.isSettingShow = !this.isSettingShow
       }
+      if (tabShow === 0) {
+        this.isSettingShow = 0
+      }
       this.tabShow = tabShow
+    },
+    toPage(href) {
+      this.$emit('toPage', href)
+      this.tabShow = null
     }
   }
 }
@@ -276,6 +300,16 @@ export default {
     .icon-progress {
       font-size: px2rem(23);
     }
+  }
+  .content-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, .8);
   }
 }
 </style>

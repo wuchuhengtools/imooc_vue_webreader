@@ -21,6 +21,8 @@
       @pageRedirect="pageRedirect"
       :progress="progress"
       @setProgress="setProgress"
+      :navication="navication"
+      @toPage="toPage"
       ref="menuBar"
       ></menu-bar>
   </div>
@@ -87,7 +89,8 @@ export default {
       ],
       defaultTheme: 'default',
       isBookProgressAvalable: false,
-      progress: 0
+      progress: 0,
+      navication: { type: Object, default: Object }
     }
   },
   watch: {
@@ -102,8 +105,7 @@ export default {
     nextPage() {
       this.rendition.next()
       if (this.locations) {
-        const progress = this.book.rendition.currentLocation()
-        console.dir(progress)
+        // const progress = this.book.rendition.currentLocation()
         // this.progress = progress.end.percentage.toFixed(2)
       }
     },
@@ -122,10 +124,11 @@ export default {
       this.rendition.themes.select(this.defaultTheme)
       // 进度条
       this.book.ready.then(() => {
+        this.navication = this.book.navigation
+        this.isBookProgressAvalable = true
         return this.book.locations.generate()
       }).then(result => {
         this.locations = this.book.locations
-        this.isBookProgressAvalable = true
         this.pageRedirect(50)
       })
     },
@@ -153,6 +156,13 @@ export default {
     },
     setProgress(progress) {
       this.progress = progress
+    },
+    toPage(href) {
+      this.book.rendition.display(href)
+      this.isTitleMenuShow = false
+    },
+    hideTitileAndmenu() {
+      this.isTitleMenuShow = false
     }
   },
   mounted() {
