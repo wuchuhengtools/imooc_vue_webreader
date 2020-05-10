@@ -1,7 +1,6 @@
 <template>
   <transition name="slide-left">
-    <div class="left-wrapper" >
-      <div class="content">
+    <div class="content" >
         <div class="content-wrapper" v-if="isBookProgressAvalable"
         ref="contentWrapper">
           <div class="content-item" v-for="(item, index) in navication.toc" :key="index"
@@ -10,7 +9,6 @@
           </div>
         </div>
         <div class="empty" v-else>加载中...</div>
-      </div>
     </div>
   </transition>
 </template>
@@ -38,14 +36,13 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/global";
 
-.left-wrapper {
+.content {
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  .content {
   .content-wrapper {
     position: absolute;
     bottom: px2rem(48);
@@ -67,7 +64,6 @@ export default {
       }
     }
   }
-}
 }
 
 </style>

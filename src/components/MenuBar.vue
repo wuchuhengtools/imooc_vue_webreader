@@ -69,17 +69,17 @@
         </div>
       </div>
     </transition>
-            <directory
-              v-show="tabShow === 4"
-              :navication="navication"
-              :isBookProgressAvalable="isBookProgressAvalable"
-              @toPage="toPage"></directory>
-          <transition >
-              <div class="content-mask"
-              v-if="tabShow === 4"
-              @click="tabShow = null">
-              </div>
-            </transition>
+    <directory
+      v-show="tabShow === 4"
+      :navication="navication"
+      :isBookProgressAvalable="isBookProgressAvalable"
+      @toPage="toPage"></directory>
+    <transition name="fade">
+      <div class="content-mask"
+      v-show="tabShow === 4"
+      @click="tabShow = null">
+      </div>
+    </transition>
 
   </div>
 </template>
