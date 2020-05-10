@@ -17,6 +17,10 @@
       :themeList="themeList"
       :defaultTheme="defaultTheme"
       @setTheme="setTheme"
+      :isBookProgressAvalable="isBookProgressAvalable"
+      @pageRedirect="pageRedirect"
+      :progress="progress"
+      @setProgress="setProgress"
       ref="menuBar"
       ></menu-bar>
   </div>
@@ -81,7 +85,9 @@ export default {
           }
         }
       ],
-      defaultTheme: 'default'
+      defaultTheme: 'default',
+      isBookProgressAvalable: false,
+      progress: 0
     }
   },
   watch: {
@@ -95,6 +101,11 @@ export default {
     },
     nextPage() {
       this.rendition.next()
+      if (this.locations) {
+        const progress = this.book.rendition.currentLocation()
+        console.dir(progress)
+        // this.progress = progress.end.percentage.toFixed(2)
+      }
     },
     showEpub() {
       this.book = new Epub(DOWNLOAD_URL)
@@ -109,6 +120,14 @@ export default {
       // 注册电子书主题
       this.registerTheme()
       this.rendition.themes.select(this.defaultTheme)
+      // 进度条
+      this.book.ready.then(() => {
+        return this.book.locations.generate()
+      }).then(result => {
+        this.locations = this.book.locations
+        this.isBookProgressAvalable = true
+        this.pageRedirect(50)
+      })
     },
     setFontSize(fontSize) {
       if (this.rendition.themes) {
@@ -126,6 +145,14 @@ export default {
     setTheme (themeName) {
       this.rendition.themes.select(themeName)
       this.defaultTheme = themeName
+    },
+    pageRedirect(progress) {
+      const percentage = progress / 100
+      const location = percentage > 0 ? this.locations.cfiFromPercentage(percentage) : 0
+      this.rendition.display(location)
+    },
+    setProgress(progress) {
+      this.progress = progress
     }
   },
   mounted() {

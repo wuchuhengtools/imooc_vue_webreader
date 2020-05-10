@@ -20,7 +20,7 @@
     </transition>
     <transition name="slide-up">
       <div class="setting-wrap" v-show="isSettingShow">
-        <div class="setting-font-size" v-if="tagShow === 3">
+        <div class="setting-font-size" v-if="tabShow === 3">
           <div class="preview" :style="{'font-size': fontSizeList[0].fontSize + 'px'}">A</div>
           <div class="option">
             <div class="select-wrapper"
@@ -39,7 +39,7 @@
           </div>
           <div class="preview" :style="{'font-size': fontSizeList[fontSizeList.length - 1].fontSize + 'px'}">A</div>
         </div>
-        <div class="setting-theme" v-if="tagShow === 2">
+        <div class="setting-theme" v-if="tabShow === 2">
           <div class="setting-theme-item"
               v-for="(item, index) in themeList"
               :key="index"
@@ -49,6 +49,22 @@
               :class="{'no-border': item.style.body.background !== '#fff'}"></div>
             <div class="text"
             :class="{ 'selected': defaultTheme === item.name }">{{item.name}}</div>
+          </div>
+        </div>
+        <div class="setting-progress" v-if="tabShow === 1">
+          <div class="progress-wrapper">
+            <input class="progress" type="range"
+            max="100"
+            min="0"
+            step="1"
+            @change="$emit('pageRedirect', $event.target.value)"
+            @input="onProgressInput($event.target.value)"
+            :value="progress"
+            :disabled="!isBookProgressAvalable"
+            ref="progress">
+          </div>
+          <div class="text-wrapper">
+            <span>{{isBookProgressAvalable ? progress + '%' : '加载中...'}}</span>
           </div>
         </div>
       </div>
@@ -62,7 +78,7 @@ export default {
   data() {
     return {
       isSettingShow: false,
-      tagShow: null
+      tabShow: null
     }
   },
   props: {
@@ -79,17 +95,23 @@ export default {
       default: 14
     },
     themeList: { type: Array, default: Array },
-    defaultTheme: { type: String, default: null }
+    defaultTheme: { type: String, default: null },
+    isBookProgressAvalable: { type: Boolean, default: false },
+    progress: { type: Number, default: 0 }
   },
   methods: {
+    onProgressInput(progress) {
+      this.$emit('setProgress', parseInt(progress))
+      this.$refs.progress.style.backgroundSize = `${progress}% 100%`
+    },
     setFonSize(fontSize) {
       this.$emit('setFontSize', fontSize)
     },
-    setSettingShow(tagShow) {
-      if (tagShow === this.tagShow || !this.isSettingShow) {
+    setSettingShow(tabShow) {
+      if (tabShow === this.tabShow || !this.isSettingShow) {
         this.isSettingShow = !this.isSettingShow
       }
-      this.tagShow = tagShow
+      this.tabShow = tabShow
     }
   }
 }
@@ -194,6 +216,43 @@ export default {
             color: #333;
           }
         }
+      }
+    }
+    .setting-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      .progress-wrapper {
+        width: 100%;
+        height: 100%;
+        @include center;
+        padding: 0 px2rem(30);
+        box-sizing: border-box;
+        .progress {
+          width: 100%;
+          -webkit-appearance: none;
+          height: px2rem(2);
+          background: -webkit-linear-gradient(#999, #999) no-repeat, #ddd;
+          background-size: 0 100%;
+          &:focus {
+            outline: none;
+          }
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: px2rem(20);
+            width: px2rem(20);
+            border-radius: 50%;
+            background:white;
+            box-shadow: 0 px2rem(2) 0 rgba(0, 0, 0, .15);
+            border: px2rem(1) solid #ddd;
+          }
+        }
+      }
+      .text-wrapper {
+        font-size: px2rem(5);
       }
     }
   }
