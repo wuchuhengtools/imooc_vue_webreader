@@ -5,7 +5,7 @@
            :class="{'hide-box-shadow': isSettingShow || !isTitleMenuShow }"
            v-show="isTitleMenuShow">
         <div class="icon-wraper">
-          <span class="icon-menu icon" @click="setSettingShow(0)"></span>
+          <span class="icon-menu icon" @click="setSettingShow(4)"></span>
         </div>
         <div class="icon-wraper">
           <span class="icon-progress icon" @click="setSettingShow(1)"></span>
@@ -69,17 +69,18 @@
         </div>
       </div>
     </transition>
-    <directory
-    v-if="tabShow === 0"
-    :navication="navication"
-    :isBookProgressAvalable="isBookProgressAvalable"
-    @toPage="toPage"></directory>
-    <transition name="fade">
-      <div class="content-mask"
-      v-if="tabShow === 0"
-      @click="tabShow = null">
-      </div>
-    </transition>
+            <directory
+              v-show="tabShow === 4"
+              :navication="navication"
+              :isBookProgressAvalable="isBookProgressAvalable"
+              @toPage="toPage"></directory>
+          <transition >
+              <div class="content-mask"
+              v-if="tabShow === 4"
+              @click="tabShow = null">
+              </div>
+            </transition>
+
   </div>
 </template>
 
@@ -94,7 +95,7 @@ export default {
   data() {
     return {
       isSettingShow: false,
-      tabShow: null
+      tabShow: 0
     }
   },
   props: {
@@ -128,10 +129,12 @@ export default {
       if (tabShow === this.tabShow || !this.isSettingShow) {
         this.isSettingShow = !this.isSettingShow
       }
-      if (tabShow === 0) {
+      if (tabShow === 4) {
         this.isSettingShow = 0
+        this.tabShow = this.tabShow === 4 ? null : tabShow
+      } else {
+        this.tabShow = tabShow
       }
-      this.tabShow = tabShow
     },
     toPage(href) {
       this.$emit('toPage', href)

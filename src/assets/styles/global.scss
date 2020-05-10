@@ -49,3 +49,14 @@ $fontSize: 37.5;
   transform: translateX(10px);
   opacity: 0;
 }
+
+// 目录动画
+.slide-left-enter, .slide-left-leave-to {
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-left-to, .slide-left-leave {
+  transform: translate3d(0, 0, 0);
+}
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all .3s linear;
+}
